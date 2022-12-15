@@ -15,7 +15,20 @@ services:
     tty: true
     working_dir: /var/www
     volumes:
-      - ./:/var/www
+      - ./infra/app:/var/www
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:1.19.8-alpine
+    container_name: nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 8100:80
+    volumes:
+      - ./infra/nginx/conf:/etc/nginx/conf.d
+      - ./infra/app/public:/var/www/public
     networks:
       - app-network
 
@@ -38,17 +51,5 @@ services:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_MULTIPLE_DATABASES=<DB 1>,<DB 2>
-    networks:
-      - app-network
-
-  nginx:
-    image: nginx:1.19.8-alpine
-    container_name: nginx
-    restart: unless-stopped
-    tty: true
-    ports:
-      - 8100:80
-    volumes:
-      - ./infra/nginx/conf:/etc/nginx/conf.d
     networks:
       - app-network
