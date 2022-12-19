@@ -15,3 +15,4 @@ use App\Http\Controllers\ImageGeneratorController;
 */
 Route::get('/', ImageGeneratorController::class);
 Route::get('/api/picsum', [ImageGeneratorController::class,'getImageJSON']);
+Route::post('store-form', [ImageGeneratorController::class, 'store']);

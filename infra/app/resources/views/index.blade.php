@@ -22,8 +22,13 @@
 </head>
 <body class="antialiased">
 <img src="https://picsum.photos/id/{{$imgID}}/600/500">
-<button>Отклонить</button>
-<button>Одобрить</button>
+<form name="picsum" id="picsum" method="post" action="{{url('store-form')}}">
+    {{ csrf_field() }}
+    <input type="hidden" name="img_id" id="img_id" value="{{$imgID}}">
+    <input type="hidden" name="status" id="status" value="1">
+<button type="submit" onclick="document.getElementById('status').value = '0';">Отклонить</button>
+<button type="submit" onclick="document.getElementById('status').value = '1';">Одобрить</button>
+</form>
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 </body>
 </html>
