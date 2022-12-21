@@ -5,11 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use App\Models\ImageSorter;
+use TheSeer\Tokenizer\Token;
 
 class ImageGeneratorController extends Controller
 {
     public function __invoke(){
         $imgID = mt_rand(1,1029);
+        foreach (ImageSorter::all() as $image) {
+            if($image->img_id == $imgID){
+                $imgID = mt_rand(1,1029);
+                return view('index',['imgID'=>$imgID]);
+            }
+        }
         return view('index',['imgID'=>$imgID]);
     }
     public function getImageJSON(){
@@ -34,5 +41,19 @@ class ImageGeneratorController extends Controller
 
     }
 
+    public function admin($key){
+        $token = '9ac051793bd31855bb6d377cdc9357228f032626a79920dd1da7a6ed8b4211cf';
+        $imageSorter = ImageSorter::all();
+        if($key === $token) {
+            return view('admin', ['imageSorter' => $imageSorter]);
+        }
+    }
+
+
+    public function reset($id)
+    {
+        ImageSorter::destroy($id);
+        return redirect('admin/9ac051793bd31855bb6d377cdc9357228f032626a79920dd1da7a6ed8b4211cf');
+    }
 
 }
